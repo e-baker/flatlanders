@@ -10,6 +10,16 @@
 			name: 'Dodecahedron',
 			price: 2,
 			description: '. . .',
+			images: [
+				{
+					full: 'dodecahedron-01.png',
+					thumb: 'dodecahedron-01.png'
+				},
+				{
+					full: 'dodecahedron-01.png',
+					thumb: 'dodecahedron-01.png'
+				}
+			],
 			canPurchase: true,
 		},
 		{
