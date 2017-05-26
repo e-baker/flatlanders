@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html ng-app="store">
+<html ng-app="gemApp">
 	<head>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script type="text/javascript" src="app.js"></script>
 		<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<style>
+		.ng-invalid.ng-dirty {
+			border-color: #fa787e;
+		}
+		.ng-valid.ng-dirty {
+			border-color: #78fa89;
+		}
+	</style>
 	</head>
 	<body ng-controller="StoreController as store">
+		<header>
+			<h1 class="text-center">Flatlander Crafted Gems</h1>
+			<h2 class="text-center">- an Angular store -</h2>
+		</header>
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="product in store.products">
+				<h3 ng-include="'product-title.html'">
+					{{ product.name }}
+					<em class="pull-right">{{ product.price | currency }}</em>
+					<img ng-src="{{product.images[0].full}}"/>
+				</h3>
+			</li>
+		</ul>
 		<section ng-controller="PanelController as panel">
 			<ul class="nav nav-pills">
 				<li ng-class="{ active: panel.isSelected(1)}"><a href ng-click="panel.selectTab(1)">Description</a></li>
@@ -21,19 +44,28 @@
 			</div>
 			<div class="panel" ng-show="panel.isSelected(3)">
 				<h4>Reviews</h4>
-				<blockquote>None yet</blockquote>
+				<blockquote ng-repeat="review in product.reviews">
+					<b>Stars: {{ review.stars }}</b>
+					{{ review.body }}
+					<cite>by: {{review.author}}</cite>
+				</blockquote>
+				<form action="" name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)" novalidate>
+					<blockquote ng-repeat="review in product.reviews">
+						<b>Stars: {{ reviewCtrl.review.stars }}</b>
+						{{ reviewCtrl.review.body }}
+						<cite>by: {{reviewCtrl.review.author}}</cite>
+					</blockquote>
+					<select ng-model="reviewCtrl.review.stars" required>
+						<option value="1">1 star</option>
+						<option value="2">2 stars</option>
+					</select>
+					<textarea ng-model="reviewCtrl.review.body" required></textarea>
+					<label for="">by:</label>
+					<input ng-model="reviewCtrl.review.author" type="email" name="" id="" required>
+					<div>reviewForm is {{ reviewForm.$valid }}</div>
+					<input type="submit" value="Submit">
+				</form>
 			</div>
 		</section>
-		<ul class="list-group">
-			<li class="list-group-item" ng-repeat="product in store.products">
-				<h3>
-					{{ product.name }}
-					<em class="pull-right">{{ product.price | currency }}</em>
-					<img ng-src="{{product.images[0].full}}"/>
-				</h3>
-			</li>
-		</ul>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
-		<script type="text/javascript" src="app.js"></script>
 	</body>
 </html>
